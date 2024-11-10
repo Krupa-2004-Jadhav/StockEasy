@@ -1,0 +1,144 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f6fd;
+    color: #333;
+  }
+  
+  .landing-page {
+    text-align: center;
+  }
+  
+  /* Header */
+  .header {
+    height: 60px; /* Ensures header height */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Side padding only */
+    background-color: #000;
+    color: #fff;
+    box-sizing: border-box; /* Ensures padding doesn’t increase height */
+    overflow: hidden; /* Prevents any overflow issues */
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo img {
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+  }
+  
+  .nav a {
+    font-size: 16px; 
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+  }
+  
+  /* Set the font size of the h3 element */
+  .logo h3 {
+    font-size: 16px; 
+  }
+  /* Main Section */
+  .main-section {
+    height: 550 px;
+    padding: 100px 20px;
+  }
+  
+  .main-section h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+  }
+  
+  .main-section p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .btn {
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  
+  .btn-login {
+    background-color: #6A0DAD;
+    color: #fff;
+  }
+  
+  .btn-signup {
+    background-color: #6A0DAD;
+    color: #fff;
+  }
+  
+  /* Features Section */
+  .features {
+    height: 310 px;
+    display: flex;
+    justify-content: space-around;
+    padding: 50px 20px;
+  }
+  
+  .feature-item {
+    width: 30%;
+  }
+  
+  .feature-item img {
+    width: 100px;
+    margin-bottom: 10px;
+  }
+  
+  .feature-item h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  .feature-item p {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  /* Footer */
+  .footer {
+    height: 60px; /* Ensures header height */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Side padding only */
+    background-color: #000;
+    color: #fff;
+    box-sizing: border-box; /* Ensures padding doesn’t increase height */
+    overflow: hidden; /* Prevents any overflow issues */
+  }
+  
+  
+  .footer-links a {
+    font-size:16 px;
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .social-icon {
+    width: 24px; /* Adjust size as needed */
+    height: 24px;
+  }
+  

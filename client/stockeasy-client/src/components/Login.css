@@ -1,0 +1,134 @@
+/* Login Page CSS */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .login-page {
+    display: flex;
+    height: 100vh;
+    background-color: #f5f3ff;
+  }
+  
+  .left-panel {
+    flex: 1;
+    background-image: url('../assets/stockeasy_sidebar.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    color: #ffffff;
+    padding: 40px;
+    text-align: center;
+    padding-bottom: 100px;
+  }
+  
+  .left-panel h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .left-panel p {
+    font-size: 1.2rem;
+    max-width: 80%;
+    margin: 0 auto;
+    line-height: 1.4;
+  }
+  
+  .right-panel {
+    flex: 1;
+    background-color: #f5f3ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+  }
+  
+  .login-form-container {
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .login-form-container h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 1rem;
+  }
+  
+  .login-form-container input[type="text"],
+  .login-form-container input[type="email"],
+  .login-form-container input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    font-size: 1rem;
+  }
+  
+  .login-form-container .btn-login {
+    width: 100%;
+    padding: 14px;
+    background-color: #6A0DAD;
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1.5rem;
+  }
+  
+  .login-form-container .btn-login:hover {
+    background-color: #5b55d6;
+  }
+  
+  .login-form-container .forgot-password,
+  .login-form-container .redirect-text {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+  
+  .login-form-container .forgot-password a,
+  .login-form-container .redirect-text a {
+    color: #6c63ff;
+    text-decoration: none;
+  }
+  
+  .login-form-container .forgot-password a:hover,
+  .login-form-container .redirect-text a:hover {
+    text-decoration: underline;
+  }
+  
+  .error-text {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: -5px;
+    margin-bottom: 10px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .login-page {
+      flex-direction: column;
+    }
+  
+    .left-panel,
+    .right-panel {
+      flex: unset;
+      width: 100%;
+      padding: 20px;
+    }
+    
+    .left-panel {
+      min-height: 40vh;
+    }
+  }
+  

@@ -1,0 +1,211 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Main Container */
+  .signup-page {
+    display: flex;
+    height: 100vh;
+    background-color: #f5f3ff;
+  }
+  
+  /* Left Panel (Background image and welcome text) */
+.left-panel {
+    flex: 1;
+    background-image: url('../assets/stockeasy_sidebar.png'); /* Replace with your actual image path */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Changed from center to move content to bottom */
+    align-items: center;
+    color: #ffffff;
+    padding: 40px;
+    text-align: center;
+    padding-bottom: 100px; /* Added to give more space at the bottom */
+  }
+  
+  .left-panel h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .left-panel p {
+    font-size: 1.2rem;
+    max-width: 80%;
+    margin: 0 auto;
+    line-height: 1.4;
+  }
+  
+  /* Right Panel (Signup form) */
+  .right-panel {
+    flex: 1;
+    background-color: #f5f3ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+  }
+  
+  .signup-form-container {
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .signup-form-container h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 1rem;
+  }
+  
+  .signup-form-container p {
+    color: #666666;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .signup-form-container input[type="text"],
+  .signup-form-container input[type="email"],
+  .signup-form-container input[type="password"],
+  .signup-form-container input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    font-size: 1rem;
+  }
+  
+  .signup-form-container label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .signup-form-container label input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  
+  .signup-form-container .btn-signup {
+    width: 100%;
+    padding: 14px;
+    background-color: #6A0DAD;
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1.5rem;
+  }
+  
+  .signup-form-container .btn-signup:hover {
+    background-color: #5b55d6;
+  }
+  
+  .signup-form-container .terms {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+  
+  .signup-form-container .terms a {
+    color: #6c63ff;
+    text-decoration: none;
+  }
+  
+  .signup-form-container .terms a:hover {
+    text-decoration: underline;
+  }
+  
+  .signup-form-container .redirect-text {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .signup-form-container .redirect-text a {
+    color: #6c63ff;
+    text-decoration: none;
+  }
+  
+  .signup-form-container .redirect-text a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Back to Home Link */
+  .back-to-home {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .back-to-home a {
+    color: #333333;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+  
+  .back-to-home a:hover {
+    text-decoration: underline;
+  }
+  
+  .error-text {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: -5px;
+    margin-bottom: 10px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 1024px) {
+    .left-panel {
+      padding: 20px;
+    }
+  
+    .left-panel h1 {
+      font-size: 2rem;
+    }
+  
+    .left-panel p {
+      font-size: 1rem;
+      max-width: 90%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .signup-page {
+      flex-direction: column;
+    }
+  
+    .left-panel,
+    .right-panel {
+      flex: unset;
+      width: 100%;
+      padding: 20px;
+    }
+    
+    .left-panel {
+      min-height: 40vh;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .left-panel h1 {
+      font-size: 1.5rem;
+    }
+  
+    .left-panel p {
+      font-size: 0.9rem;
+    }
+  
+    .signup-form-container h2 {
+      font-size: 1.5rem;
+    }
+  }
+  
