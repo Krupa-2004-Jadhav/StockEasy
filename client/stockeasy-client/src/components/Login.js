@@ -29,21 +29,25 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // Reset error message
-
+  
     try {
-      const response = await axios.post('/api/login', formData);
-      if (response.data.success) {
+      const response = await axios.post('http://localhost:5000/auth/login', formData);
+      console.log("Login response:", response); // Log the entire response
+  
+      // Check if response data contains token directly
+      if (response.status === 200 && response.data.token) {
         // Store auth token and navigate to dashboard
         localStorage.setItem('authToken', response.data.token);
         navigate('/dashboard');
-      } else if (response.data.error) {
-        setError(response.data.error); // Display error from backend
+      } else {
+        setError("Login failed. Please check your credentials.");
       }
     } catch (error) {
       console.error("Login error:", error);
       setError("An error occurred. Please try again.");
     }
   };
+  
 
   return (
     <div className="login-page">

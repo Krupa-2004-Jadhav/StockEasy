@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Signup.css';
 
-
 const Signup = () => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -17,19 +16,16 @@ const Signup = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if the user is already logged in
     const token = localStorage.getItem('authToken');
     if (token) {
       navigate('/dashboard');
     }
   }, [navigate]);
 
-  // Form validation
   const validateForm = () => {
     let formErrors = {};
     let isValid = true;
 
-    // Check for required fields
     Object.keys(formData).forEach(key => {
       if (!formData[key]) {
         formErrors[key] = 'This field is required';
@@ -37,20 +33,17 @@ const Signup = () => {
       }
     });
 
-    // Validate email format
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.email && !emailPattern.test(formData.email)) {
       formErrors.email = 'Please enter a valid email address';
       isValid = false;
     }
 
-    // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
       formErrors.confirmPassword = 'Passwords do not match';
       isValid = false;
     }
 
-    // Validate age (should be a number and at least 18)
     if (isNaN(formData.age) || formData.age < 18) {
       formErrors.age = 'You must be at least 18 years old';
       isValid = false;
@@ -60,27 +53,23 @@ const Signup = () => {
     return isValid;
   };
 
-  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post('/auth/signup', formData);
+      const response = await axios.post('http://localhost:5000/auth/signup', formData);
       if (response.data.success) {
         navigate('/dashboard');
-      } else if (response.data.error === 'Username taken') {
-        setErrors({ username: 'Username is already taken' });
       }
     } catch (error) {
-      console.error("Signup error:", error);
-      alert("An error occurred. Please try again.");
+      console.error("Signup error:", error.response?.data || error.message);
+      setErrors({ general: error.response?.data?.message || 'An error occurred. Please try again.' });
     }
   };
 
@@ -146,6 +135,8 @@ const Signup = () => {
               onChange={handleChange}
             />
             {errors.confirmPassword && <p className="error-text">{errors.confirmPassword}</p>}
+
+            {errors.general && <p className="error-text">{errors.general}</p>}
 
             <label className="terms-checkbox">
               <input type="checkbox" required />

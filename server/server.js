@@ -1,31 +1,21 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const authRoutes = require('./routes/auth'); // Import the auth routes
+const connectDB = require('./db'); // Adjust the path if necessary
+const authRoutes = require('./routes/auth');
 
-// Load environment variables from .env file
+// Load environment variables
 dotenv.config();
 
+// Initialize Express app
 const app = express();
 
-// Middleware to parse JSON requests
+// Middleware
 app.use(express.json());
-
-// Enable CORS
 app.use(cors());
 
-// Connect to MongoDB using environment variable for URI
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/User', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => {
-  console.log('Connected to MongoDB');
-})
-.catch((error) => {
-  console.error('MongoDB connection error:', error);
-});
+// Connect to MongoDB locally
+connectDB();
 
 // Use authentication routes
 app.use('/auth', authRoutes);
