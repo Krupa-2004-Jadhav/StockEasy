@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
@@ -9,15 +9,26 @@ const Login = () => {
     password: ''
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check if the user is already logged in
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      navigate('/dashboard');
-    }
-  }, [navigate]);
+  // Check if the user is already logged in
+  const token = localStorage.getItem('authToken');
+
+  // If already authenticated, show a button to go to dashboard
+  if (token) {
+    return (
+      <div className="login-page">
+        <div className="left-panel">
+          <h1>You are already logged in!</h1>
+          <button onClick={() => navigate('/dashboard')} className="btn-login">
+            Go to Dashboard
+          </button>
+          <Link to="/" className="back-to-home">Back to Home</Link>
+        </div>
+      </div>
+    );
+  }
 
   // Handle input change
   const handleChange = (e) => {
@@ -28,26 +39,27 @@ const Login = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Reset error message
-  
+    setError('');
+    setLoading(true);
+
     try {
       const response = await axios.post('http://localhost:5000/auth/login', formData);
-      console.log("Login response:", response); // Log the entire response
-  
-      // Check if response data contains token directly
+      console.log("Login response:", response);
+
       if (response.status === 200 && response.data.token) {
         // Store auth token and navigate to dashboard
         localStorage.setItem('authToken', response.data.token);
         navigate('/dashboard');
       } else {
-        setError("Login failed. Please check your credentials.");
+        setError("Invalid email or password.");
       }
     } catch (error) {
       console.error("Login error:", error);
-      setError("An error occurred. Please try again.");
+      setError("An error occurred during login. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
-  
 
   return (
     <div className="login-page">
@@ -63,7 +75,7 @@ const Login = () => {
             <input
               type="email"
               name="email"
-              placeholder="Your username or email"
+              placeholder="Your email"
               value={formData.email}
               onChange={handleChange}
               required
@@ -77,10 +89,11 @@ const Login = () => {
               required
             />
             {error && <p className="error-text">{error}</p>}
-
-            <button type="submit" className="btn-login">Log In</button>
+            <button type="submit" className="btn-login" disabled={loading}>
+              {loading ? 'Logging in...' : 'Log In'}
+            </button>
           </form>
-          
+
           <div className="forgot-password">
             <Link to="/forgot-password">Forgot Password?</Link>
           </div>

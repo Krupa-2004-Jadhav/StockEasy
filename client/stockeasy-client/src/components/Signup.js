@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Signup.css';
@@ -13,37 +13,54 @@ const Signup = () => {
     confirmPassword: ''
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      navigate('/dashboard');
-    }
-  }, [navigate]);
+  // Check if the user is already logged in
+  const token = localStorage.getItem('authToken');
 
+  // If already authenticated, show a button to go to dashboard
+  if (token) {
+    return (
+      <div className="signup-page">
+        <div className="left-panel">
+          <h1>You are already signed up!</h1>
+          <button onClick={() => navigate('/dashboard')} className="btn-signup">
+            Go to Dashboard
+          </button>
+          <Link to="/" className="back-to-home">Back to Home</Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Form validation
   const validateForm = () => {
     let formErrors = {};
     let isValid = true;
 
-    Object.keys(formData).forEach(key => {
+    // Check for required fields
+    Object.keys(formData).forEach((key) => {
       if (!formData[key]) {
         formErrors[key] = 'This field is required';
         isValid = false;
       }
     });
 
+    // Email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.email && !emailPattern.test(formData.email)) {
       formErrors.email = 'Please enter a valid email address';
       isValid = false;
     }
 
+    // Password confirmation
     if (formData.password !== formData.confirmPassword) {
       formErrors.confirmPassword = 'Passwords do not match';
       isValid = false;
     }
 
+    // Age validation
     if (isNaN(formData.age) || formData.age < 18) {
       formErrors.age = 'You must be at least 18 years old';
       isValid = false;
@@ -53,23 +70,34 @@ const Signup = () => {
     return isValid;
   };
 
+  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    setLoading(true);
+    setErrors({});
+
     try {
       const response = await axios.post('http://localhost:5000/auth/signup', formData);
       if (response.data.success) {
+        // Store the token and redirect to the dashboard
+        localStorage.setItem('authToken', response.data.token);
         navigate('/dashboard');
+      } else {
+        setErrors({ general: response.data.message || 'Signup failed. Please try again.' });
       }
     } catch (error) {
       console.error("Signup error:", error.response?.data || error.message);
       setErrors({ general: error.response?.data?.message || 'An error occurred. Please try again.' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -143,7 +171,9 @@ const Signup = () => {
               I agree to StockEasy's <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>
             </label>
 
-            <button type="submit" className="btn-signup">Sign Up</button>
+            <button type="submit" className="btn-signup" disabled={loading}>
+              {loading ? 'Signing up...' : 'Sign Up'}
+            </button>
           </form>
 
           <div className="redirect-text">
