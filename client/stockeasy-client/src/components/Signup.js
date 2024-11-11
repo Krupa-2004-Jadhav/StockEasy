@@ -72,7 +72,7 @@ const Signup = () => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post('/api/signup', formData);
+      const response = await axios.post('/auth/signup', formData);
       if (response.data.success) {
         navigate('/dashboard');
       } else if (response.data.error === 'Username taken') {
