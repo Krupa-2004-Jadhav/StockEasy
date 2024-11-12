@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import './Signup.css';
 
 const Signup = () => {
@@ -86,9 +87,16 @@ const Signup = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/auth/signup', formData);
+
       if (response.data.success) {
-        // Store the token and redirect to the dashboard
-        localStorage.setItem('authToken', response.data.token);
+        // Store the token and decode to extract user_id
+        const token = response.data.token;
+        localStorage.setItem('authToken', token);
+        
+        const decodedToken = jwtDecode(token); // Decode the token
+        const userId = decodedToken.user_id; // Extract user ID
+        localStorage.setItem('userId', userId); // Store user ID for use in the app
+
         navigate('/dashboard');
       } else {
         setErrors({ general: response.data.message || 'Signup failed. Please try again.' });

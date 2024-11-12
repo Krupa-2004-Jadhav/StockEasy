@@ -6,7 +6,7 @@ import Dashboard from './components/Dashboard';
 import TradeScreen from './components/TradeScreen';
 import LearningTrack from './components/LearningTrack'; // Import LearningTrack
 import PortfolioDetails from './components/PortfolioDetails'; // Import PortfolioDetails
-import MarketNews from './components/MarketNews'; // Import MarketNews
+import MarketAlerts from './components/MarketAlerts'; // Import MarketNews
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
         <Route path="/trade" element={<TradeScreen />} />
         <Route path="/learn" element={<LearningTrack />} />
         <Route path="/portfolio" element={<PortfolioDetails />} />
-        <Route path="/market-news" element={<MarketNews />} />
+        <Route path="/market-news" element={<MarketAlerts />} />
       </Routes>
     </Router>
   );
