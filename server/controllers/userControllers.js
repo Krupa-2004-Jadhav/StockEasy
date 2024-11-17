@@ -1,30 +1,74 @@
-// server/controllers/userController.js
 const User = require('../models/User');
 
-// Get user portfolio
-exports.getUserPortfolio = async (req, res) => {
+// Helper function to calculate holdings value
+const calculateHoldingsValue = (holdings) => {
+  return holdings.reduce((acc, holding) => {
+    return acc + holding.quantity * holding.currentPrice;
+  }, 0);
+};
+
+// Controller to get dashboard data
+const getUserDashboardData = async (req, res) => {
   try {
-    // Assuming `req.userId` is set via middleware
-    const user = await User.findById(req.userId).lean();
-    
-    // If user not found
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    // Include virtual fields in the response
-    const { holdings, cash, accountValue, buyingPower, todaysChange, annualReturn } = user;
-    
-    res.json({
-      holdings,
-      cash,
+    // Calculate account value (cash + holdings value)
+    const holdingsValue = calculateHoldingsValue(user.holdings);
+    const accountValue = user.cash + holdingsValue;
+    const buyingPower = user.cash;
+
+    // Prepare and send dashboard data response
+    const dashboardData = {
       accountValue,
       buyingPower,
-      todaysChange,
-      annualReturn,
-    });
+      todaysChange: user.todaysChange || 0,
+      annualReturn: user.annualReturn || 0,
+    };
+
+    res.status(200).json(dashboardData);
+  } catch (error) {
+    console.error('Error fetching dashboard data:', error);
+    res.status(500).json({ error: 'Server error', message: error.message });
+  }
+};
+
+// Controller to get portfolio data
+const getUserPortfolioData = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Calculate account value (cash + holdings value)
+    const holdingsValue = calculateHoldingsValue(user.holdings);
+    const accountValue = user.cash + holdingsValue;
+    const buyingPower = user.cash;
+
+    // Prepare and send portfolio data response
+    const portfolioData = {
+      holdings: user.holdings,
+      accountValue,
+      buyingPower,
+      todaysChange: user.todaysChange || 0,
+      annualReturn: user.annualReturn || 0,
+    };
+
+    res.status(200).json(portfolioData);
   } catch (error) {
     console.error('Error fetching portfolio data:', error);
-    res.status(500).json({ message: 'Error fetching portfolio data', error: error.message });
+    res.status(500).json({ error: 'Server error', message: error.message });
   }
+};
+
+module.exports = {
+  getUserDashboardData,
+  getUserPortfolioData,
 };

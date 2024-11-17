@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import logo from '../assets/stockeasy_logo.png';
 import notificationIcon from '../assets/Notifcations Icon.png';
 import profileIcon from '../assets/Profile Icon.png';
@@ -13,18 +14,31 @@ const PortfolioDetails = () => {
   const [annualReturn, setAnnualReturn] = useState(0);
   const [todayChange, setTodayChange] = useState(0);
 
+  // Fetch portfolio data from the backend API
   useEffect(() => {
     const fetchPortfolioData = async () => {
-      const data = [
-        { symbol: 'AAPL', description: 'Apple Inc.', currentPrice: 150, todayChange: '+1.5%', purchasePrice: 130, qty: 10, totalValue: 1500, gainLoss: '+200' },
-        { symbol: 'TSLA', description: 'Tesla Inc.', currentPrice: 700, todayChange: '-0.8%', purchasePrice: 650, qty: 5, totalValue: 3500, gainLoss: '+250' },
-      ];
-      setPortfolio(data);
+      try {
+        const response = await axios.get('/api/user/portfolio', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        const { holdings, accountValue, buyingPower, cash, todaysChange, annualReturn } = response.data;
+  
+        setPortfolio(holdings);
+        setAccountValue(accountValue);
+        setBuyingPower(buyingPower);
+        setCash(cash);
+        setAnnualReturn(annualReturn);
+        setTodayChange(todaysChange);
+      } catch (error) {
+        console.error('Error fetching portfolio data:', error);
+      }
     };
-
+  
     fetchPortfolioData();
   }, []);
-
+  
   return (
     <div>
       {/* Primary Header */}
@@ -55,36 +69,40 @@ const PortfolioDetails = () => {
         {/* Left Column: Holdings Section */}
         <div className="holdings-section">
           <h2>Stock & ETFs Holdings</h2>
-          <div className="portfolio-container">
-            <table className="portfolio-table">
-              <thead>
-                <tr>
-                  <th>Symbol</th>
-                  <th>Description</th>
-                  <th>Current Price</th>
-                  <th>Today's Change</th>
-                  <th>Purchase Price</th>
-                  <th>QTY</th>
-                  <th>Total Value</th>
-                  <th>Total Gain/Loss</th>
-                </tr>
-              </thead>
-              <tbody>
-                {portfolio.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.symbol}</td>
-                    <td>{item.description}</td>
-                    <td>{item.currentPrice}</td>
-                    <td>{item.todayChange}</td>
-                    <td>{item.purchasePrice}</td>
-                    <td>{item.qty}</td>
-                    <td>{item.totalValue}</td>
-                    <td>{item.gainLoss}</td>
+          {portfolio.length > 0 ? (
+            <div className="portfolio-container">
+              <table className="portfolio-table">
+                <thead>
+                  <tr>
+                    <th>Symbol</th>
+                    <th>Description</th>
+                    <th>Current Price</th>
+                    <th>Today's Change</th>
+                    <th>Purchase Price</th>
+                    <th>QTY</th>
+                    <th>Total Value</th>
+                    <th>Total Gain/Loss</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {portfolio.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.symbol}</td>
+                      <td>{item.description}</td>
+                      <td>{item.currentPrice}</td>
+                      <td>{item.todayChange}</td>
+                      <td>{item.purchasePrice}</td>
+                      <td>{item.qty}</td>
+                      <td>{item.totalValue}</td>
+                      <td>{item.gainLoss}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p>No holdings found in your portfolio.</p>
+          )}
         </div>
 
         {/* Right Column */}
@@ -97,7 +115,9 @@ const PortfolioDetails = () => {
             </div>
             <div className="overview-card">
               <h3>Today's Change</h3>
-              <p style={{ color: '#00ff00' }}>+Rs. {todayChange.toLocaleString()}</p>
+              <p style={{ color: todayChange >= 0 ? '#00ff00' : '#ff0000' }}>
+                {todayChange >= 0 ? '+' : '-'}Rs. {Math.abs(todayChange).toLocaleString()}
+              </p>
             </div>
             <div className="overview-card">
               <h3>Annual Return</h3>
