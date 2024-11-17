@@ -7,7 +7,10 @@ import TradeScreen from './components/TradeScreen';
 import LearningTrack from './components/LearningTrack'; // Import LearningTrack
 import PortfolioDetails from './components/PortfolioDetails'; // Import PortfolioDetails
 import MarketAlerts from './components/MarketAlerts'; // Import MarketNews
+import setupAxiosAuth from './axiosSetup';
 
+// Call during app initialization
+setupAxiosAuth();
 function App() {
   return (
     <Router>

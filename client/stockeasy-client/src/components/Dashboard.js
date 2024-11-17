@@ -6,6 +6,8 @@ import notificationIcon from '../assets/Notifcations Icon.png';
 import profileIcon from '../assets/Profile Icon.png';
 import './Dashboard.css';
 
+//axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+
 function Dashboard() {
   const [selectedTab, setSelectedTab] = useState('1W');
   const [dashboardData, setDashboardData] = useState({
@@ -28,7 +30,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await axios.get('/api/user/dashboard', {
+        const response = await axios.get('http://localhost:5000/api/user/dashboard', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -55,7 +57,7 @@ function Dashboard() {
     if (isSidebarVisible) {
       const fetchUserDetails = async () => {
         try {
-          const response = await axios.get('/api/user/details', {
+          const response = await axios.get('http://localhost:5000/api/user/dashboard', {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
@@ -80,6 +82,7 @@ function Dashboard() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    localStorage.clear(); // Instead of removing items one by one
     window.location.href = '/login'; // Redirect to login
   };
 

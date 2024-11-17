@@ -10,7 +10,7 @@ const calculateHoldingsValue = (holdings) => {
 // Controller to get dashboard data
 const getUserDashboardData = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.userId;
     const user = await User.findById(userId);
 
     if (!user) {
@@ -24,6 +24,10 @@ const getUserDashboardData = async (req, res) => {
 
     // Prepare and send dashboard data response
     const dashboardData = {
+      username: user.username,
+      fullName: user.fullName,
+      email: user.email,
+      age: user.age,
       accountValue,
       buyingPower,
       todaysChange: user.todaysChange || 0,

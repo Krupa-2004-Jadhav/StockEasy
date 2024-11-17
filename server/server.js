@@ -22,7 +22,11 @@ const app = express();
 
 // Middleware setup
 app.use(express.json()); // To parse JSON bodies
-app.use(cors());         // Enable CORS
+app.use(cors({
+  origin: 'http://localhost:3000' ,
+  allowedHeaders: ['Authorization', 'Content-Type']
+}));
+        // Enable CORS
 
 // Connect to MongoDB
 connectDB().then(() => {
@@ -33,9 +37,9 @@ connectDB().then(() => {
 });
 
 // Route setups
-app.use('/auth', authRoutes); // Authentication routes
-app.use('/user', userRoutes); // User routes
-app.use('/trade', tradeRoutes); // Trade routes
+app.use('/api/auth', authRoutes); // Authentication routes
+app.use('/api/user', userRoutes); // User routes
+app.use('/api/trade', tradeRoutes); // Trade routes
 
 // Schedule daily metrics update at midnight
 cron.schedule('0 0 * * *', async () => {

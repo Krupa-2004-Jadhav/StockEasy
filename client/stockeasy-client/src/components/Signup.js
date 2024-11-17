@@ -86,17 +86,17 @@ const Signup = () => {
     setErrors({});
 
     try {
-      const response = await axios.post('http://localhost:5000/auth/signup', formData);
+      const response = await axios.post('http://localhost:5000/api/auth/signup', formData);
 
       if (response.data.success) {
         // Store the token and decode to extract user_id
         const token = response.data.token;
         localStorage.setItem('authToken', token);
-        
+        //console.log("Token generated for user hehehe:", token);
+        axios.defaults.headers.common['authorization'] = `Bearer ${token}`;
         const decodedToken = jwtDecode(token); // Decode the token
-        const userId = decodedToken.user_id; // Extract user ID
+        const userId = decodedToken.userId; // Extract user ID
         localStorage.setItem('userId', userId); // Store user ID for use in the app
-
         navigate('/dashboard');
       } else {
         setErrors({ general: response.data.message || 'Signup failed. Please try again.' });

@@ -1,14 +1,13 @@
+const axios = require('axios');
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+const JWT_SECRET = process.env.JWT_SECRET || '268a015b0f9e3e973d5a6ffbad5d88d08ffa54a33f36ffcd3d49b7df4102a0792db69b956100390924eed1edb2b2de7d8035bca2a3bba42fd00d0e8956bbecbd';
 
 router.post('/signup', async (req, res) => {
-  console.log("Received signup data:", req.body);
-
   try {
     const { fullName, username, email, age, password } = req.body;
 
@@ -26,9 +25,10 @@ router.post('/signup', async (req, res) => {
       age,
       password: hashedPassword,
     });
-
     await newUser.save();
-    res.status(201).json({ success: true, message: 'User created successfully' });
+    const token = jwt.sign({ userId: newUser._id }, '268a015b0f9e3e973d5a6ffbad5d88d08ffa54a33f36ffcd3d49b7df4102a0792db69b956100390924eed1edb2b2de7d8035bca2a3bba42fd00d0e8956bbecbd', { expiresIn: '1d' });
+    axios.defaults.headers.common['authorization'] = `Bearer ${token}`;
+    res.status(201).json({ success: true, message: 'User created successfully',token });
   } catch (error) {
     console.error("Error in signup:", error);
     res.status(500).json({ message: 'Error creating user', error });
@@ -49,7 +49,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Incorrect password' });
     }
 
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign({ userId: user._id }, '268a015b0f9e3e973d5a6ffbad5d88d08ffa54a33f36ffcd3d49b7df4102a0792db69b956100390924eed1edb2b2de7d8035bca2a3bba42fd00d0e8956bbecbd', { expiresIn: '1d' });
     res.json({ message: 'Login successful', token });
   } catch (error) {
     res.status(500).json({ message: 'Error logging in', error });

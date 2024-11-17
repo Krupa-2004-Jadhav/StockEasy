@@ -5,7 +5,7 @@ const ALPHA_VANTAGE_API_KEY = 'ONEWZ1PBZVZSFEST';
 export const fetchMarketNews = async () => {
     try {
         const response = await axios.get(`https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey=${ALPHA_VANTAGE_API_KEY}`);
-        console.log(response.data); // Debugging: Check if API returns correct data
+        //console.log(response.data); // Debugging: Check if API returns correct data
         const newsFeed = response.data.feed || [];
 
         // Format and return relevant fields

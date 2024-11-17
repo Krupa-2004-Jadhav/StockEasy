@@ -44,7 +44,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/auth/login', formData);
+      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
 
       if (response.status === 200 && response.data.token) {
         // Store auth token and decode to extract user_id
