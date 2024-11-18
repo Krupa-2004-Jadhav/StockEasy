@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import logo from '../assets/stockeasy_logo.png';
 import notificationIcon from '../assets/Notifcations Icon.png';
 import profileIcon from '../assets/Profile Icon.png';
@@ -6,7 +7,45 @@ import './MarketAlerts.css';
 import { fetchMarketNews } from '../services/alphaVantageAPI';
 
 function MarketAlerts() {
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [userDetails, setUserDetails] = useState({
+    fullName: '',
+    username: '',
+    email: '',
+    age: '',
+  });
     const [marketNews, setMarketNews] = useState([]);
+
+    // Fetch user details when sidebar is opened
+    useEffect(() => {
+        if (isSidebarVisible) {
+          const fetchUserDetails = async () => {
+            try {
+              const response = await axios.get('http://localhost:5000/api/user/dashboard', {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+              });
+    
+              const { fullName, username, email, age } = response.data;
+    
+              setUserDetails({ fullName, username, email, age });
+            } catch (error) {
+              console.error('Error fetching user details:', error);
+            }
+          };
+    
+          fetchUserDetails();
+        }
+      }, [isSidebarVisible]);
+    
+      // Logout handler
+      const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.clear();
+        window.location.href = '/login';
+      };
 
     useEffect(() => {
         const fetchNewsData = async () => {
@@ -42,7 +81,12 @@ function MarketAlerts() {
                 </nav>
                 <div className="header-icons">
                     <img src={notificationIcon} alt="Notification" className="header-icon" />
-                    <img src={profileIcon} alt="Profile" className="header-icon" />
+                    <img
+            src={profileIcon}
+            alt="Profile"
+            className="header-icon"
+            onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+          />
                 </div>
             </div>
 
@@ -66,6 +110,27 @@ function MarketAlerts() {
                     ))}
                 </div>
             </div>
+            {/* Sidebar */}
+            {isSidebarVisible && (
+        <>
+          <div className="sidebar-backdrop" onClick={() => setIsSidebarVisible(false)}></div>
+          <div className="sidebar">
+            <h3>Account Details</h3>
+            {userDetails.fullName ? (
+              <div className="sidebar-details">
+                <p><strong>Full Name:</strong> {userDetails.fullName}</p>
+                <p><strong>Username:</strong> {userDetails.username}</p>
+                <p><strong>Email:</strong> {userDetails.email}</p>
+                <p><strong>Age:</strong> {userDetails.age}</p>
+              </div>
+            ) : (
+              <p>Loading...</p>
+            )}
+            <button onClick={handleLogout} className="sidebar-btn">Logout</button>
+            <button onClick={() => setIsSidebarVisible(false)} className="sidebar-btn close-btn">Close</button>
+          </div>
+        </>
+      )}
         </div>
     );
 }

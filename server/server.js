@@ -26,7 +26,6 @@ app.use(cors({
   origin: 'http://localhost:3000' ,
   allowedHeaders: ['Authorization', 'Content-Type']
 }));
-        // Enable CORS
 
 // Connect to MongoDB
 connectDB().then(() => {

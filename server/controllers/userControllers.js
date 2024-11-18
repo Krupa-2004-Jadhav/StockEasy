@@ -44,7 +44,7 @@ const getUserDashboardData = async (req, res) => {
 // Controller to get portfolio data
 const getUserPortfolioData = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.userId;
     const user = await User.findById(userId);
 
     if (!user) {
