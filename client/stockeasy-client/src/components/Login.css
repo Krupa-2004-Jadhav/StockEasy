@@ -132,3 +132,27 @@
     }
   }
   
+  .login-form-container p {
+    color: #333333; /* Ensure visibility */
+    margin-bottom: 1rem; /* Add spacing for better readability */
+  }
+  
+  .login-form-container .forgot-password a,
+  .login-form-container .redirect-text a {
+    color: #6A0DAD; /* Match button color for consistency */
+    text-decoration: none;
+    font-weight: bold; /* Make links more prominent */
+  }
+  
+  .login-form-container .forgot-password,
+  .login-form-container .redirect-text {
+    margin-top: 1rem;
+    color: #555555; /* Adjust contrast for visibility */
+    text-align: center; /* Center-align the text */
+  }
+  
+  .login-form-container .forgot-password a:hover,
+  .login-form-container .redirect-text a:hover {
+    text-decoration: underline;
+    color: #5b55d6; /* Provide hover feedback */
+  }

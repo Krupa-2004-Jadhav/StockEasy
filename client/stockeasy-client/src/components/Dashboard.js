@@ -22,7 +22,14 @@ function Dashboard() {
     email: '',
     age: '',
   });
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false); // Sidebar visibility state
+  const [leaderboardData, setLeaderboardData] = useState({
+    currentRank: null,
+    topUser: {
+      username: '',
+      accountValue: 0
+    }
+  });
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const userId = localStorage.getItem('userId');
 
@@ -50,6 +57,29 @@ function Dashboard() {
     };
 
     fetchDashboardData();
+  }, []);
+
+  // Fetch leaderboard data
+  useEffect(() => {
+    const fetchLeaderboardData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/user/leaderboard', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+        const { currentRank, topUser } = response.data;
+        setLeaderboardData({
+          currentRank,
+          topUser
+        });
+      } catch (error) {
+        console.error('Error fetching leaderboard data:', error);
+      }
+    };
+
+    fetchLeaderboardData();
   }, []);
 
   // Fetch user details when sidebar is opened
@@ -82,8 +112,8 @@ function Dashboard() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
-    localStorage.clear(); // Instead of removing items one by one
-    window.location.href = '/login'; // Redirect to login
+    localStorage.clear();
+    window.location.href = '/login';
   };
 
   return (
@@ -111,7 +141,7 @@ function Dashboard() {
             src={profileIcon}
             alt="Profile"
             className="header-icon"
-            onClick={() => setIsSidebarVisible(!isSidebarVisible)} // Toggle sidebar visibility
+            onClick={() => setIsSidebarVisible(!isSidebarVisible)}
           />
         </div>
       </div>
@@ -159,16 +189,28 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Leaderboard Section */}
+        {/* Enhanced Leaderboard Section */}
         <div className="leaderboard-section">
           <h3>Leaderboard</h3>
           <div className="leaderboard-item">
-            <span>Current Rank</span>
-            <span>--</span>
+            <span>Your Rank</span>
+            <span>{leaderboardData.currentRank || '--'}</span>
           </div>
           <div className="leaderboard-item">
             <span>Top Player</span>
-            <span>--</span>
+            <span>
+              {leaderboardData.topUser.username ? (
+                <>
+                  {leaderboardData.topUser.username}
+                  <br />
+                  <small style={{ color: '#00ff00' }}>
+                    Rs. {leaderboardData.topUser.accountValue.toLocaleString()}
+                  </small>
+                </>
+              ) : (
+                '--'
+              )}
+            </span>
           </div>
         </div>
       </div>

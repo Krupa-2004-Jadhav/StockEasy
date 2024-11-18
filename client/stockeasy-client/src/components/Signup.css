@@ -209,3 +209,40 @@
     }
   }
   
+  .terms-checkbox {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #4a4a4a;
+    margin-top: 10px;
+    white-space: nowrap;
+    gap: 8px;
+  }
+  
+  .terms-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #6a0dad; 
+    cursor: pointer;
+  }
+  
+  .terms-checkbox a {
+    color: #6a0dad;
+    text-decoration: underline;
+  }
+  
+  .terms-checkbox a:hover {
+    color: #4b4bff;
+    text-decoration: none;
+  }
+  
+  .terms-checkbox input[type="checkbox"]:focus {
+    outline: 2px solid #6a0dad;
+    outline-offset: 2px;
+  }
+
+  .signup-form-container .redirect-text a {
+    color: #6A0DAD; /* Match button color for consistency */
+    text-decoration: none;
+    font-weight: bold; /* Make links more prominent */
+  }

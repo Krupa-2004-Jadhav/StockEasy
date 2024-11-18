@@ -72,7 +72,85 @@ const getUserPortfolioData = async (req, res) => {
   }
 };
 
+// New leaderboard controller function
+const getLeaderboardData = async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    // Get all users and calculate their account values in a single aggregation pipeline
+    const users = await User.aggregate([
+      {
+        $project: {
+          username: 1,
+          cash: 1,
+          holdings: 1,
+          createdAt: 1,
+          // Calculate total holdings value
+          holdingsValue: {
+            $reduce: {
+              input: '$holdings',
+              initialValue: 0,
+              in: {
+                $add: [
+                  '$$value',
+                  { $multiply: ['$$this.quantity', '$$this.currentPrice'] }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        $addFields: {
+          accountValue: { $add: ['$cash', '$holdingsValue'] }
+        }
+      },
+      {
+        $sort: {
+          accountValue: -1,
+          createdAt: 1
+        }
+      }
+    ]);
+
+    // Find top user
+    const topUser = users.length > 0 ? {
+      username: users[0].username,
+      accountValue: users[0].accountValue
+    } : {
+      username: 'No users yet',
+      accountValue: 0
+    };
+
+    // Find current user's rank
+    const currentUserRank = users.findIndex(user => 
+      user._id.toString() === userId.toString()
+    ) + 1;
+
+    // Get top 10 users for the leaderboard
+    const topUsers = users.slice(0, 10).map(user => ({
+      username: user.username,
+      accountValue: user.accountValue
+    }));
+
+    res.json({
+      currentRank: currentUserRank || '--',
+      topUser,
+      totalUsers: users.length,
+      leaderboard: topUsers
+    });
+
+  } catch (error) {
+    console.error('Error fetching leaderboard data:', error);
+    res.status(500).json({ 
+      message: 'Failed to fetch leaderboard data',
+      error: error.message 
+    });
+  }
+};
+
 module.exports = {
   getUserDashboardData,
   getUserPortfolioData,
+  getLeaderboardData
 };
