@@ -152,7 +152,7 @@ function Dashboard() {
         <div className="overview-section">
           <div className="overview-card">
             <h3>Account Value</h3>
-            <p>Rs. {dashboardData.accountValue.toLocaleString()}</p>
+            <p>Rs. {dashboardData.accountValue?.toLocaleString() ?? '0'}</p>
           </div>
           <div className="overview-card">
             <h3>Today's Change</h3>
